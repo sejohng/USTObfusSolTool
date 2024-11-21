@@ -1,5 +1,5 @@
 # USTObfusSolTool
-**Developed as part of CSIT 5730 Group7 Project**
+**Developed as part of CSIT 5730 Group 7 Project**
 
 ## Author
 - **Shijun Jiang** - [sejohng](https://github.com/sejohng): Design code structures, develop project code, and deliver testing solutions
@@ -10,19 +10,19 @@
 
 ## Intro
 
-USTObfusSolTool is a Solidity code obfuscation tool designed to enhance the security of Ethereum smart contracts by applying multiple obfuscation techniques. The tool obfuscates Solidity code at the source level to make it more challenging for attackers or reverse engineers to analyze the code while maintaining its original functionality.
+USTObfusSolTool is a Solidity code obfuscation tool intended to enhance the security of Ethereum smart contracts by applying manifold obfuscation techniques. The source-level Solidity code could be obfuscated with this tool in such a way that it will be tougher for attackers or reverse engineers to understand the code while keeping intact the original functionality.
 
 
 ## Features
-- Layout Obfuscation: Renames variables, functions, and events to obscure intent.
-- Dataflow Obfuscation: Introduces temporary variables, splits constants, and modifies assignment logic.
-- Control Flow Obfuscation: Adds fake conditions, loops, and complex conditional expressions.
-- Dead Code Insertion: Inserts meaningless code to increase complexity.
-- String Obfuscation: Encodes and splits strings.
-- Arithmetic Obfuscation: Adds redundant calculations to arithmetic expressions.
-- Function Obfuscation: Inlines simple functions and splits complex ones.
-- Comment Obfuscation: Removes existing comments and inserts misleading ones.
-- Hash-Based Obfuscation: Converts variable and function names into hashed identifiers.
+- **Layout Obfuscation**: Renames variables, functions, and events, in order to mask intent.
+- **Dataflow Obfuscation**: Introduces temporary variables, splits constants, and modifies assignment logic.
+- **Control Flow Obfuscation**: Adds fake conditions, loops, and complex conditional expressions.
+- **Dead Code Insertion**: Inserts meaningless code to increase complexity.
+- **String Obfuscation**: Encodes and splits strings.
+- **Arithmetic Obfuscation**: Adds redundant calculations to arithmetic expressions.
+- **Function Obfuscation**: Inlines simple functions and splits complex ones.
+- **Comment Obfuscation**: Removes existing comments and inserts misleading ones.
+- **Hash-Based Obfuscation**: Converts variable and function names into hashed identifiers.
 
 ## Usage
 
