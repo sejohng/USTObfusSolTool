@@ -4,9 +4,9 @@
 ## Author
 - **Shijun Jiang** - [sejohng](https://github.com/sejohng): Design code structures, develop project code, and deliver testing solutions
 - **Qifan Liao** - [lqfcn](https://github.com/lqfcn): Refine the preliminary code, implement test cases, and enhance the functionality of the obfuscator
-- Qiutong Li: Responsible for drafting project plans and reports, as well as offering testing and functional recommendations
-- Yibo Xu: Provide support for project presentation preparation, slide creation, and post-production verification.
-- Yanxi Yang: Responsible for drafting project plans and reports, as well as offering testing and functional recommendations
+- **Qiutong Li**: Responsible for drafting project plans and reports, as well as offering testing and functional recommendations
+- **Yibo Xu**: Provide support for project presentation preparation, slide creation, and post-production verification.
+- **Yanxi Yang**: Responsible for drafting project plans and reports, as well as offering testing and functional recommendations
 
 ## Intro
 
