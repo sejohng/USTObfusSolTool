@@ -19,8 +19,6 @@ USTObfusSolTool is a Solidity code obfuscation tool intended to enhance the secu
 - **Control Flow Obfuscation**: Adds fake conditions, loops, and complex conditional expressions.
 - **Dead Code Insertion**: Inserts meaningless code to increase complexity.
 - **String Obfuscation**: Encodes and splits strings.
-- **Comment Obfuscation**: Removes existing comments and inserts misleading ones.
-- **Hash-Based Obfuscation**: Converts variable and function names into hashed identifiers.
 
 ## Usage
 
@@ -58,13 +56,7 @@ python3 main.py examples/input1.sol examples/output1.sol --layout --dataflow
 
 `--string` : Apply string obfuscation.
 
-`--function` : Apply function inlining and splitting.
-
-`--comment` : Apply comment masking obfuscation.
-
-`--hash` : Apply hash-based obfuscation for variable and function names.
-
-`--all` : Apply all obfuscation techniques.
+`--all` or leave blank : Apply all obfuscation techniques.
 
 
 ## Running Tests
