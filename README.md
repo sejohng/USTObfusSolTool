@@ -1,12 +1,51 @@
 # USTObfusSolTool
 
 ## Author
-- **Shijun Jiang** - [sejohng](https://github.com/sejohng)
-- **Qifan Liao** - [lqfcn](https://github.com/lqfcn)
-- Qiutong Li
-- Yibo Xu
-- Yanxi Yang
-## Intro
 ** Developed as part of CSIT 5730 Project **
+- **Shijun Jiang** - [sejohng](https://github.com/sejohng): Design code structures, develop project code, and deliver testing solutions
+- **Qifan Liao** - [lqfcn](https://github.com/lqfcn): Refine the preliminary code, implement test cases, and enhance the functionality of the obfuscator
+- Qiutong Li: Responsible for drafting project plans and reports, as well as offering testing and functional recommendations
+- Yibo Xu: Provide support for project presentation preparation, slide creation, and post-production verification.
+- Yanxi Yang: Responsible for drafting project plans and reports, as well as offering testing and functional recommendations
+
+## Intro
 
 USTObfusSolTool is a Solidity code obfuscation tool designed to enhance the security of Ethereum smart contracts by applying multiple obfuscation techniques. The tool obfuscates Solidity code at the source level to make it more challenging for attackers or reverse engineers to analyze the code while maintaining its original functionality.
+
+
+## Features
+- Layout Obfuscation: Renames variables, functions, and events to obscure intent.
+- Dataflow Obfuscation: Introduces temporary variables, splits constants, and modifies assignment logic.
+- Control Flow Obfuscation: Adds fake conditions, loops, and complex conditional expressions.
+- Dead Code Insertion: Inserts meaningless code to increase complexity.
+- String Obfuscation: Encodes and splits strings.
+- Arithmetic Obfuscation: Adds redundant calculations to arithmetic expressions.
+- Function Obfuscation: Inlines simple functions and splits complex ones.
+- Comment Obfuscation: Removes existing comments and inserts misleading ones.
+- Hash-Based Obfuscation: Converts variable and function names into hashed identifiers.
+
+##Usage
+
+Obfuscation Tool
+
+Run the obfuscation tool from the command line with the following syntax:
+```bash
+python3 main.py examples/input.sol examples/output.sol --all
+```
+
+Apply specific obfuscators (see Options below):
+```bash
+python3 main.py examples/input.sol examples/output.sol --layout --dataflow
+```
+
+##Options
+- layout: Apply layout obfuscation.
+- dataflow: Apply dataflow obfuscation.
+- controlflow: Apply control flow obfuscation.
+- deadcode: Apply dead code insertion.
+- string: Apply string obfuscation.
+- arithmetic: Apply arithmetic obfuscation.
+- function: Apply function inlining and splitting.
+- comment: Apply comment masking obfuscation.
+- hash: Apply hash-based obfuscation for variable and function names.
+- all: Apply all obfuscation techniques.
