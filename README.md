@@ -3,7 +3,7 @@
 
 ## Author
 - **Shijun Jiang** - [sejohng](https://github.com/sejohng): Design code structures, develop project code, and deliver testing solutions
-- **Qifan Liao** - [lqfcn](https://github.com/lqfcn): Refine the preliminary code, implement test cases, and enhance the functionality of the obfuscator
+- **Qifan Liao** - [lqfcn](https://github.com/lqfcn): Implement and enhance the obfuscators, refine the preliminary code, and implement test cases
 - **Qiutong Li**: Responsible for drafting project plans and reports, as well as offering testing and functional recommendations
 - **Yibo Xu**: Provide support for project presentation preparation, slide creation, and post-production verification.
 - **Yanxi Yang**: Responsible for drafting project plans and reports, as well as offering testing and functional recommendations
@@ -19,8 +19,6 @@ USTObfusSolTool is a Solidity code obfuscation tool intended to enhance the secu
 - **Control Flow Obfuscation**: Adds fake conditions, loops, and complex conditional expressions.
 - **Dead Code Insertion**: Inserts meaningless code to increase complexity.
 - **String Obfuscation**: Encodes and splits strings.
-- **Arithmetic Obfuscation**: Adds redundant calculations to arithmetic expressions.
-- **Function Obfuscation**: Inlines simple functions and splits complex ones.
 - **Comment Obfuscation**: Removes existing comments and inserts misleading ones.
 - **Hash-Based Obfuscation**: Converts variable and function names into hashed identifiers.
 
@@ -60,8 +58,6 @@ python3 main.py examples/input1.sol examples/output1.sol --layout --dataflow
 
 `--string` : Apply string obfuscation.
 
-`--arithmetic` : Apply arithmetic obfuscation.
-
 `--function` : Apply function inlining and splitting.
 
 `--comment` : Apply comment masking obfuscation.
@@ -91,5 +87,6 @@ python3 -m unittest tests/test_layout.py
 
 For questions or assistance, please contact the authors:
 - Shijun Jiang (shijun.jiang@connect.ust.hk)
+- Qifan Liao (qliaoad@connect.ust.hk)
 
 

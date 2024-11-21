@@ -5,10 +5,6 @@ from obfuscators.dataflow_obfuscator import DataflowObfuscator
 from obfuscators.controlflow_obfuscator import ControlflowObfuscator
 from obfuscators.deadcode_obfuscator import DeadCodeObfuscator
 from obfuscators.string_obfuscator import StringObfuscator
-from obfuscators.arithmetic_obfuscator import ArithmeticObfuscator
-from obfuscators.function_obfuscator import FunctionObfuscator
-from obfuscators.hash_obfuscator import HashObfuscator
-from obfuscators.comment_obfuscator import CommentObfuscator
 from utils.parser import SolidityParser
 from utils.helper import save_output
 
@@ -52,6 +48,7 @@ def print_usage():
     Example:
         python3 main.py examples/input.sol examples/output.sol --all
     """)
+
 def main():
     """
     Main function for the obfuscation tool.
@@ -65,7 +62,10 @@ def main():
     # Parse input and output file paths
     input_file = sys.argv[1]
     output_file = sys.argv[2]
-    options = sys.argv[3:]  # Additional options for obfuscation techniques
+    if len(sys.argv) == 3:
+        options = ["--all"]     # Default to --all
+    else:
+        options = sys.argv[3:]  # Additional options for obfuscation techniques
     
     # Check if the input file exists
     if not os.path.exists(input_file):
@@ -83,50 +83,30 @@ def main():
         
     # Initialize and apply obfuscators
     obfuscated_code = parsed_code
-    if "--layout" in options or "--all" in options:
-        print("Applying layout obfuscation...")
-        layout_obfuscator = LayoutObfuscator()
-        obfuscated_code = layout_obfuscator.obfuscate(obfuscated_code)
-        
-    if "--dataflow" in options or "--all" in options:
-        print("Applying dataflow obfuscation...")
-        dataflow_obfuscator = DataflowObfuscator()
-        obfuscated_code = dataflow_obfuscator.obfuscate(obfuscated_code)
-        
-    if "--controlflow" in options or "--all" in options:
-        print("Applying control flow obfuscation...")
-        controlflow_obfuscator = ControlflowObfuscator()
-        obfuscated_code = controlflow_obfuscator.obfuscate(obfuscated_code)
-        
     if "--deadcode" in options or "--all" in options:
         print("Applying dead code insertion obfuscation...")
         deadcode_obfuscator = DeadCodeObfuscator()
         obfuscated_code = deadcode_obfuscator.obfuscate(obfuscated_code)
-        
+
     if "--string" in options or "--all" in options:
         print("Applying string obfuscation...")
         string_obfuscator = StringObfuscator()
         obfuscated_code = string_obfuscator.obfuscate(obfuscated_code)
         
-    if "--arithmetic" in options or "--all" in options:
-        print("Applying arithmetic obfuscation...")
-        arithmetic_obfuscator = ArithmeticObfuscator()
-        obfuscated_code = arithmetic_obfuscator.obfuscate(obfuscated_code)
-        
-    if "--function" in options or "--all" in options:
-        print("Applying function obfuscation...")
-        function_obfuscator = FunctionObfuscator()
-        obfuscated_code = function_obfuscator.obfuscate(obfuscated_code)
-        
-    if "--hash" in options or "--all" in options:
-        print("Applying hash-based obfuscation...")
-        hash_obfuscator = HashObfuscator()
-        obfuscated_code = hash_obfuscator.obfuscate(obfuscated_code)
-        
-    if "--comment" in options or "--all" in options:
-        print("Applying comment masking obfuscation...")
-        comment_obfuscator = CommentObfuscator()
-        obfuscated_code = comment_obfuscator.obfuscate(obfuscated_code)
+    if "--dataflow" in options or "--all" in options:
+        print("Applying dataflow obfuscation...")
+        dataflow_obfuscator = DataflowObfuscator()
+        obfuscated_code = dataflow_obfuscator.obfuscate(obfuscated_code)
+
+    if "--controlflow" in options or "--all" in options:
+        print("Applying control flow obfuscation...")
+        controlflow_obfuscator = ControlflowObfuscator()
+        obfuscated_code = controlflow_obfuscator.obfuscate(obfuscated_code)
+
+    if "--layout" in options or "--all" in options:
+        print("Applying layout obfuscation...")
+        layout_obfuscator = LayoutObfuscator()
+        obfuscated_code = layout_obfuscator.obfuscate(obfuscated_code)
         
     # Save the obfuscated code to the output file
     try:

@@ -12,8 +12,8 @@ class StringObfuscator:
         :return: Obfuscated string
         """
         parts = [string[i:i + 2] for i in range(0, len(string), 2)]
-        encoded = " + ".join(f'"{part}"' for part in parts)
-        return f"string(abi.encodePacked({encoded}))"
+        encoded = "+".join(f'"{part}"' for part in parts)
+        return f"{encoded}"
 
     def obfuscate_strings(self, code):
         """

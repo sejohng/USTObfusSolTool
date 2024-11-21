@@ -1,6 +1,9 @@
 import random
 import re
 
+from utils.helper import generate_random_name
+
+
 class ControlflowObfuscator:
     """
     Control Flow Obfuscator
@@ -10,60 +13,73 @@ class ControlflowObfuscator:
         """
         Initialize the obfuscator
         """
-        self.fake_conditions = [
-            "if (1 == 0) {{ {} }}",  # Condition that will never be true
-            "if (block.timestamp < 0) {{ {} }}",  # Impossible timestamp condition
-            "for (uint256 i = 0; i < 0; i++) {{ {} }}"  # Invalid loop
+        self.always_true_conditions = [
+            "((7 % 3) + 1 == 5)",
+            "((6 * 2) - 1 == 11)",
+            "((18 / 3) - 1 != 4)",
+            "((7 * 3) % 20 == 1)",
         ]
 
-    def insert_fake_condition(self, code):
-        """
-        Insert fake conditional branches into the code
-        :param code: Input code
-        :return: Code with fake conditions inserted
-        """
-        pattern = r'(function\s+\w+\s*\(.*?\)\s*\{)'  # Match function definition start
-        matches = re.findall(pattern, code)
-
-        for match in matches:
-            fake_condition = random.choice(self.fake_conditions)
-            replacement = f"{match}\n    {fake_condition.format('// Fake branch')}"
-            code = code.replace(match, replacement)
-
-        return code
-
-    def complexify_conditionals(self, code):
+    def complexify_conditions(self, code):
         """
         Complexify simple conditional logic
         :param code: Input code
-        :return: Code with complexified conditionals
+        :return: Code with complexified conditions
         """
-        pattern = r'\bif\s*\((.*?)\)\s*\{'
+        pattern = r'\bif\s*\(([^{]*)\)\s*\{'
 
         def replace_condition(match):
             original_condition = match.group(1)
-            fake_logic = f"(({original_condition}) && (1 == 1))"
+            if random.random() < 0.5:
+                fake_logic = f"(({original_condition}) && {random.choice(self.always_true_conditions)})"
+            else:
+                fake_logic = f"(({original_condition}) || !{random.choice(self.always_true_conditions)})"
             return f"if ({fake_logic}) {{"
 
         return re.sub(pattern, replace_condition, code)
 
-    def insert_fake_loops(self, code):
+    def shuffle_code_blocks(self, code):
         """
-        Insert meaningless loops into the functions
+        Shuffle the order of functions and contract members
         :param code: Input code
-        :return: Code with fake loops inserted
+        :return: Code with shuffled blocks
         """
-        pattern = r'(function\s+\w+\s*\(.*?\)\s*\{)'
+        pragma_match = re.search(r'pragma\s+solidity.*?;', code)
+        contract_match = re.search(r'contract\s+\w+\s*\{', code)
 
-        def add_fake_loop(match):
-            fake_loop = """
-            for (uint256 i = 0; i < 1; i++) {
-                // Fake loop
-            }
-            """
-            return f"{match.group(1)}\n    {fake_loop.strip()}"
+        if not pragma_match or not contract_match:
+            raise ValueError("Invalid Solidity contract structure.")
 
-        return re.sub(pattern, add_fake_loop, code)
+        pragma = pragma_match.group()
+        contract_def = contract_match.group()
+
+        # Extract the body of the contract
+        body_start = contract_match.end()
+        body_end = code.rfind("}")
+        body_content = code[body_start:body_end].strip()
+
+        # Split contract body into blocks and shuffle
+        blocks = re.findall(r'(function[^{}]*{([^{}]*{[^{}]*})*[^{}]*}|mapping.*?;|event.*?;|modifier[^{}]*{([^{}]*{[^{}]*})*[^{}]*}|constructor[^{}]*{([^{}]*{[^{}]*})*[^{}]*}|struct[^{}]*{([^{}]*{[^{}]*})*[^{}]*}|((bool|u?int(8|16|32|64|128|256)?|u?fixed|address|string|byte(s[0-9]*)?|enum)\s+(([a-zA-Z_][a-zA-Z0-9_]*)\s+)*(?P<var_name>[a-zA-Z_][a-zA-Z0-9_]*);))', body_content, flags=re.DOTALL)
+        random.shuffle(blocks)
+
+        shuffled_body = ''
+        for block in blocks:
+            shuffled_body += block[0]
+        return f"{pragma}{contract_def}{shuffled_body}}}"
+
+    def minify_code(self, code):
+        """
+        Minify Solidity code by removing all unnecessary spaces and line breaks.
+        :param code: Input code
+        :return: Minified code
+        """
+        # Remove all line breaks and multiple spaces
+        code = re.sub(r'\s+', ' ', code)
+        # Remove spaces around curly braces and semicolons
+        code = re.sub(r'\s*{\s*', '{', code)
+        code = re.sub(r'\s*}\s*', '}', code)
+        code = re.sub(r'\s*;\s*', ';', code)
+        return code.strip()
 
     def obfuscate(self, code):
         """
@@ -71,11 +87,11 @@ class ControlflowObfuscator:
         :param code: Input code
         :return: Obfuscated code
         """
-        # Insert fake conditional branches
-        code = self.insert_fake_condition(code)
         # Complexify simple conditionals
-        code = self.complexify_conditionals(code)
-        # Insert meaningless loops
-        code = self.insert_fake_loops(code)
+        code = self.complexify_conditions(code)
+        # Minify the code
+        code = self.minify_code(code)
+        # Shuffle code block order
+        code = self.shuffle_code_blocks(code)
 
         return code

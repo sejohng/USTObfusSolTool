@@ -61,7 +61,11 @@ contract AdvancedExample {
     }
 
     function getUserBalance(address user) public view returns (uint256) {
-        return users[user].balance;
+        if (users[user].balance > 0){
+            return users[user].balance;
+        } else {
+            return 0;
+        }
     }
 
     function getUserStatus(address user) public view returns (bool) {

@@ -15,6 +15,16 @@ def save_output(output_path, code):
     except Exception as e:
         raise IOError(f"Failed to save file at {output_path}: {e}")
 
+def generate_random_name(length=0):
+    """
+    Generate a random string
+    :param length: Length of the string
+    :return: Random name
+    """
+    if length == 0:
+        length = random.randrange(8, 16)
+    return random.choice(string.ascii_lowercase) + ''.join(random.choices(string.ascii_letters + string.digits, k=length-1))
+
 def generate_random_identifier(length=8):
     """
     Generate a random alphanumeric identifier.

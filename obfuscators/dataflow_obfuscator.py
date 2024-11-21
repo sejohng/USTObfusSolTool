@@ -1,6 +1,9 @@
 import re
 import random
 
+from utils.helper import generate_random_name
+
+
 class DataflowObfuscator:
     """
     Data Flow Obfuscator
@@ -27,7 +30,7 @@ class DataflowObfuscator:
         :return: Code with constants split into expressions
         """
         def replace_constant(match):
-            value = int(match.group())
+            value = int(match. group())
             if value > 10:  # Avoid overly complex splitting for small values
                 part1 = random.randint(1, value - 1)
                 part2 = value - part1
@@ -43,13 +46,16 @@ class DataflowObfuscator:
         :param code: Input code
         :return: Code with temporary variables inserted
         """
-        pattern = r'(\b[a-zA-Z_][a-zA-Z0-9_]*\b)\s*=\s*(.+?);'
+        pattern = r'\b(?P<prefix>(?P<var_type>bool|u?int(8|16|32|64|128|256)?|u?fixed|address|string|byte(s[0-9]*)?|enum)\s+(([a-zA-Z_][a-zA-Z0-9_]*)\s+)*)(?P<var_name>[a-zA-Z_][a-zA-Z0-9_]*)\b\s*=\s*(?P<var_val>.+?);'
+        matches = re.finditer(pattern, code)
 
         def replace_assignment(match):
-            variable = match.group(1)
-            value = match.group(2)
-            temp_var = self.generate_temp_variable()
-            return f"uint256 {temp_var} = {value};\n    {variable} = {temp_var};"
+            var_value = match.group('var_val')
+            var_name = match.group('var_name')
+            var_type = match.group('var_type')
+            prefix = match.group('prefix')
+            temp_var = generate_random_name()
+            return f"{var_type} {temp_var} = {var_value};\n\t{prefix}{var_name} = {temp_var};"
 
         return re.sub(pattern, replace_assignment, code)
 
