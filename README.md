@@ -39,16 +39,27 @@ python3 main.py examples/input.sol examples/output.sol --layout --dataflow
 ```
 
 ## Options
-- layout: Apply layout obfuscation.
-- dataflow: Apply dataflow obfuscation.
-- controlflow: Apply control flow obfuscation.
-- deadcode: Apply dead code insertion.
-- string: Apply string obfuscation.
-- arithmetic: Apply arithmetic obfuscation.
-- function: Apply function inlining and splitting.
-- comment: Apply comment masking obfuscation.
-- hash: Apply hash-based obfuscation for variable and function names.
-- all: Apply all obfuscation techniques.
+
+`--layout` : Apply layout obfuscation.
+
+`--dataflow` : Apply dataflow obfuscation.
+
+`--controlflow` : Apply control flow obfuscation.
+
+`--deadcode` : Apply dead code insertion.
+
+`--string` : Apply string obfuscation.
+
+`--arithmetic` : Apply arithmetic obfuscation.
+
+`--function` : Apply function inlining and splitting.
+
+`--comment` : Apply comment masking obfuscation.
+
+`--hash` : Apply hash-based obfuscation for variable and function names.
+
+`--all` : Apply all obfuscation techniques.
+
 
 ## Running Tests
 
