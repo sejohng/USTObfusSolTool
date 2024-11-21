@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 /**
  * Example Solidity contract for testing obfuscation.
+ * Author: Shijun Jiang @HKUST
  */
 contract ExampleContract {
     uint256 public myVariable;
