@@ -12,18 +12,15 @@ class ArithmeticObfuscator:
         :param code: Input code
         :return: Code with obfuscated arithmetic expressions
         """
-        pattern = r'(\b\d+\s*[\+\-\*/]\s*\d+\b)'  # Match simple arithmetic operations
-
+        
+        pattern = r'(\b[a-zA-Z_][a-zA-Z0-9_]*\s*[\+\-\*/]\s*[a-zA-Z_0-9]+\b|\b\d+\s*[\+\-\*/]\s*\d+\b)'
+        
         def replace_arithmetic(match):
-            expression = match.group(1)
-            components = expression.split()
-            if len(components) == 3:
-                a, operator, b = components
-                return f"(({a} {operator} {b}) + 0 - 0)"
-            return expression
-
+            expression = match.group(1)  
+            return f"(({expression}) + 0 - 0)"  
+        
         return re.sub(pattern, replace_arithmetic, code)
-
+    
     def obfuscate(self, code):
         """
         Apply arithmetic obfuscation
@@ -31,3 +28,6 @@ class ArithmeticObfuscator:
         :return: Code with applied obfuscation
         """
         return self.obfuscate_arithmetic(code)
+    
+    
+    
