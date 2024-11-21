@@ -63,7 +63,7 @@ python3 -m unittest discover -s tests
 To run a specific test file, for example, test_layout.py:
 
 ```bash
-python3 tests/test_layout.py
+python3 -m unittest tests/test_layout.py
 ```
 
 ## Contact
