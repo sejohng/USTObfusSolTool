@@ -1,4 +1,4 @@
-# USTObfusSolTool
+![image](https://github.com/user-attachments/assets/34d45afb-7b0f-4e40-8522-628ba53942ed)# USTObfusSolTool
 **Developed as part of CSIT 5730 Group7 Project**
 
 ## Author
@@ -30,12 +30,22 @@ Obfuscation Tool
 
 Run the obfuscation tool from the command line with the following syntax:
 ```bash
-python3 main.py examples/input.sol examples/output.sol --all
+python main.py examples/input1.sol examples/output1.sol --all
+```
+or
+
+```bash
+python3 main.py examples/input1.sol examples/output1.sol --all
 ```
 
 Apply specific obfuscators (see Options below):
 ```bash
-python3 main.py examples/input.sol examples/output.sol --layout --dataflow
+python main.py examples/input1.sol examples/output1.sol --layout --dataflow
+```
+or
+
+```bash
+python3 main.py examples/input1.sol examples/output1.sol --layout --dataflow
 ```
 
 ## Options
