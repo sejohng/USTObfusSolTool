@@ -24,7 +24,7 @@ USTObfusSolTool is a Solidity code obfuscation tool designed to enhance the secu
 - Comment Obfuscation: Removes existing comments and inserts misleading ones.
 - Hash-Based Obfuscation: Converts variable and function names into hashed identifiers.
 
-##Usage
+## Usage
 
 Obfuscation Tool
 
@@ -38,7 +38,7 @@ Apply specific obfuscators (see Options below):
 python3 main.py examples/input.sol examples/output.sol --layout --dataflow
 ```
 
-##Options
+## Options
 - layout: Apply layout obfuscation.
 - dataflow: Apply dataflow obfuscation.
 - controlflow: Apply control flow obfuscation.
@@ -49,3 +49,26 @@ python3 main.py examples/input.sol examples/output.sol --layout --dataflow
 - comment: Apply comment masking obfuscation.
 - hash: Apply hash-based obfuscation for variable and function names.
 - all: Apply all obfuscation techniques.
+
+## Running Tests
+
+About the Tests
+
+The tests/ folder contains unit tests for all major obfuscation modules and utilities. Each test file verifies the functionality of a specific obfuscator or utility.
+To run all test cases at once, use the following command:
+
+```bash
+python3 -m unittest discover -s tests
+```
+To run a specific test file, for example, test_layout.py:
+
+```bash
+python3 tests/test_layout.py
+```
+
+## Contact
+
+For questions or assistance, please contact the authors:
+- Shijun Jiang (shijun.jiang@connect.ust.hk)
+
+
