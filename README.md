@@ -1,7 +1,7 @@
 # USTObfusSolTool
+**Developed as part of CSIT 5730 Group7 Project**
 
 ## Author
-** Developed as part of CSIT 5730 Project **
 - **Shijun Jiang** - [sejohng](https://github.com/sejohng): Design code structures, develop project code, and deliver testing solutions
 - **Qifan Liao** - [lqfcn](https://github.com/lqfcn): Refine the preliminary code, implement test cases, and enhance the functionality of the obfuscator
 - Qiutong Li: Responsible for drafting project plans and reports, as well as offering testing and functional recommendations
