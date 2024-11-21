@@ -2,6 +2,7 @@ import re
 import random
 import string
 
+
 class LayoutObfuscator:
     """
     Layout Obfuscator
@@ -16,7 +17,7 @@ class LayoutObfuscator:
         self.fake_code_templates = [
             "function fakeFunction{}() public {{}}",
             "uint256 constant FAKE_VAR{} = {};",
-            "// This is a fake comment {}"
+            "// Fake comment {}"
         ]
 
     def generate_random_name(self, length=8):
@@ -39,7 +40,7 @@ class LayoutObfuscator:
         for match in matches:
             if match not in self.variable_map and not self.is_reserved_word(match):
                 self.variable_map[match] = self.generate_random_name()
-                code = re.sub(r'\b' + match + r'\b', self.variable_map[match], code)
+                code = re.sub(rf'\b{match}\b', self.variable_map[match], code)
 
         return code
 
@@ -55,7 +56,7 @@ class LayoutObfuscator:
         for match in matches:
             if match not in self.function_map:
                 self.function_map[match] = self.generate_random_name()
-                code = re.sub(r'\b' + match + r'\b', self.function_map[match], code)
+                code = re.sub(rf'\b{match}\b', self.function_map[match], code)
 
         return code
 
@@ -65,10 +66,28 @@ class LayoutObfuscator:
         :param code: Input code
         :return: Code with shuffled blocks
         """
-        # Extract functions or other code blocks
-        blocks = re.findall(r'(function.*?}|mapping.*?;|uint.*?;|event.*?;|modifier.*?}|constructor.*?})', code, flags=re.DOTALL)
-        random.shuffle(blocks)  # Shuffle the order
-        return '\n\n'.join(blocks)
+        # Preserve "pragma solidity" and "contract" definitions
+        pragma_match = re.search(r'pragma solidity .*?;', code)
+        contract_match = re.search(r'contract\s+\w+\s*{', code)
+
+        if not pragma_match or not contract_match:
+            raise ValueError("Missing required Solidity contract structure.")
+
+        pragma = pragma_match.group()
+        contract_def = contract_match.group()
+
+        # Extract code blocks within the contract
+        body_start = contract_match.end()
+        body_end = code.rfind("}")  # Find the last closing bracket
+        body_content = code[body_start:body_end].strip()
+
+        # Identify and shuffle functions and other members
+        blocks = re.findall(r'(function.*?}|mapping.*?;|uint.*?;|event.*?;|modifier.*?}|constructor.*?})', body_content, flags=re.DOTALL)
+        random.shuffle(blocks)
+
+        # Reconstruct the contract with shuffled blocks
+        shuffled_body = '\n\n'.join(blocks)
+        return f"{pragma}\n\n{contract_def}\n{shuffled_body}\n}}"
 
     def insert_fake_code(self, code, num_fake_items=3):
         """
@@ -81,7 +100,10 @@ class LayoutObfuscator:
         for i in range(num_fake_items):
             template = random.choice(self.fake_code_templates)
             if "{}" in template:
-                fake_items.append(template.format(random.randint(0, 100)))
+                try:
+                    fake_items.append(template.format(random.randint(0, 100)))
+                except IndexError:
+                    continue  # Ignore if formatting fails
         return code + '\n\n' + '\n'.join(fake_items)
 
     def is_reserved_word(self, word):
