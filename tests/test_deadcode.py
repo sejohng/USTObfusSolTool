@@ -1,29 +1,58 @@
 import unittest
-from obfuscators.deadcode_obfuscator import DeadCodeObfuscator
+from obfuscators.dataflow_obfuscator import DataflowObfuscator
 
 class TestDeadCodeObfuscator(unittest.TestCase):
-    """
-    Unit tests for DeadCodeObfuscator.
-    """
-
     def setUp(self):
-        self.obfuscator = DeadCodeObfuscator()
-        self.solidity_code = """
-        pragma solidity ^0.8.0;
+        """
+        Initialize the DataflowObfuscator for testing
+        """
+        self.obfuscator = DataflowObfuscator()
 
-        contract Example {
-            function testFunction(uint256 input) public returns (uint256) {
-                return input * 2;
-            }
-        }
+    def test_split_constants(self):
         """
+        Test splitting constants into expressions
+        """
+        original_code = """
+        uint256 value = 100;
+        uint256 anotherValue = 50;
+        """
+        obfuscated_code = self.obfuscator.split_constants(original_code)
+        
+        # Assert that constants are split into expressions
+        self.assertRegex(obfuscated_code, r'\b\d+\s*\+\s*\d+\b')  # Check for addition expression
+        self.assertNotIn("100;", obfuscated_code)  # Ensure original constants are not present
+        self.assertNotIn("50;", obfuscated_code)
 
-    def test_dead_code_insertion(self):
+    def test_insert_temp_variables(self):
         """
-        Test if dead code is inserted into functions.
+        Test inserting temporary variables in assignments
         """
-        obfuscated_code = self.obfuscator.obfuscate(self.solidity_code)
-        self.assertIn("uint256 uselessVar = 0;", obfuscated_code)  # Check for dead code
+        original_code = """
+        uint256 result = 10 * 2;
+        uint256 anotherResult = 5 + 5;
+        """
+        obfuscated_code = self.obfuscator.insert_temp_variables(original_code)
+        
+        # Assert that temporary variables are inserted correctly
+        self.assertIn("uint256 tempVar_1 =", obfuscated_code)  # Check for tempVar
+        self.assertIn("result = tempVar_1;", obfuscated_code)
+        self.assertIn("uint256 tempVar_2 =", obfuscated_code)
+        self.assertIn("anotherResult = tempVar_2;", obfuscated_code)
+
+    def test_full_obfuscation(self):
+        """
+        Test full obfuscation pipeline
+        """
+        original_code = """
+        uint256 value = 100;
+        uint256 result = value + 50;
+        """
+        obfuscated_code = self.obfuscator.obfuscate(original_code)
+        
+        # Assert that constants are split and temp variables are inserted
+        self.assertRegex(obfuscated_code, r'\b\d+\s*\+\s*\d+\b')  # Check for split constants
+        self.assertIn("uint256 tempVar_1 =", obfuscated_code)  # Check for tempVar insertion
+        self.assertIn("value = tempVar_1;", obfuscated_code)
 
 if __name__ == "__main__":
     unittest.main()
