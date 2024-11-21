@@ -54,9 +54,9 @@ class LayoutObfuscator:
         matches = re.findall(pattern, code)
 
         for func_name in matches:
-            if func_name not in self.function_map:
-                self.function_map[func_name] = self.generate_random_name()
-                code = re.sub(rf'\b{func_name}\b', self.function_map[func_name], code)
+            if func_name not in self.variable_map:
+                self.variable_map[func_name] = self.generate_random_name()
+                code = re.sub(rf'\b{func_name}\b', self.variable_map[func_name], code)
 
         return code
 
@@ -72,7 +72,6 @@ class LayoutObfuscator:
             template = random.choice(self.fake_code_templates)
             fake_items.append(template.format(random.randint(0, 100)))
 
-        # Insert fake code at the end of the contract
         return code.strip() + '\n\n' + '\n'.join(fake_items)
 
     def shuffle_code_blocks(self, code):
@@ -102,6 +101,20 @@ class LayoutObfuscator:
         shuffled_body = '\n\n'.join(blocks)
         return f"{pragma}\n\n{contract_def}\n{shuffled_body}\n}}"
 
+    def minify_code(self, code):
+        """
+        Minify Solidity code by removing all unnecessary spaces and line breaks.
+        :param code: Input code
+        :return: Minified code
+        """
+        # Remove all line breaks and multiple spaces
+        code = re.sub(r'\s+', ' ', code)
+        # Remove spaces around curly braces and semicolons
+        code = re.sub(r'\s*{\s*', '{', code)
+        code = re.sub(r'\s*}\s*', '}', code)
+        code = re.sub(r'\s*;\s*', ';', code)
+        return code.strip()
+
     def obfuscate(self, code):
         """
         Apply layout obfuscation
@@ -116,5 +129,7 @@ class LayoutObfuscator:
         code = self.insert_fake_code(code)
         # 4. Shuffle code block order
         code = self.shuffle_code_blocks(code)
+        # 5. Minify the code
+        code = self.minify_code(code)
 
         return code

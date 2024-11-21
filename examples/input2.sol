@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+/**
+ * Example Solidity contract for testing obfuscation.
+ * Author: Shijun Jiang @HKUST
+ */
+
 contract ComplexExample {
     uint256 public totalSupply;
     mapping(address => uint256) private balances;
