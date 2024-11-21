@@ -34,13 +34,13 @@ class LayoutObfuscator:
         :param code: Input code
         :return: Code with obfuscated variable names
         """
-        pattern = r'\b([a-zA-Z_][a-zA-Z0-9_]*)\b'
+        pattern = r'\b(uint256|address|bool|string)\s+([a-zA-Z_][a-zA-Z0-9_]*)'
         matches = re.findall(pattern, code)
 
-        for match in matches:
-            if match not in self.variable_map and not self.is_reserved_word(match):
-                self.variable_map[match] = self.generate_random_name()
-                code = re.sub(rf'\b{match}\b', self.variable_map[match], code)
+        for var_type, var_name in matches:
+            if var_name not in self.variable_map:
+                self.variable_map[var_name] = self.generate_random_name()
+                code = re.sub(rf'\b{var_name}\b', self.variable_map[var_name], code)
 
         return code
 
@@ -50,44 +50,15 @@ class LayoutObfuscator:
         :param code: Input code
         :return: Code with obfuscated function names
         """
-        pattern = r'\bfunction\s+([a-zA-Z_][a-zA-Z0-9_]*)\b'
+        pattern = r'function\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\('
         matches = re.findall(pattern, code)
 
-        for match in matches:
-            if match not in self.function_map:
-                self.function_map[match] = self.generate_random_name()
-                code = re.sub(rf'\b{match}\b', self.function_map[match], code)
+        for func_name in matches:
+            if func_name not in self.function_map:
+                self.function_map[func_name] = self.generate_random_name()
+                code = re.sub(rf'\b{func_name}\b', self.function_map[func_name], code)
 
         return code
-
-    def shuffle_code_blocks(self, code):
-        """
-        Shuffle the order of functions and contract members
-        :param code: Input code
-        :return: Code with shuffled blocks
-        """
-        # Preserve "pragma solidity" and "contract" definitions
-        pragma_match = re.search(r'pragma solidity .*?;', code)
-        contract_match = re.search(r'contract\s+\w+\s*{', code)
-
-        if not pragma_match or not contract_match:
-            raise ValueError("Missing required Solidity contract structure.")
-
-        pragma = pragma_match.group()
-        contract_def = contract_match.group()
-
-        # Extract code blocks within the contract
-        body_start = contract_match.end()
-        body_end = code.rfind("}")  # Find the last closing bracket
-        body_content = code[body_start:body_end].strip()
-
-        # Identify and shuffle functions and other members
-        blocks = re.findall(r'(function.*?}|mapping.*?;|uint.*?;|event.*?;|modifier.*?}|constructor.*?})', body_content, flags=re.DOTALL)
-        random.shuffle(blocks)
-
-        # Reconstruct the contract with shuffled blocks
-        shuffled_body = '\n\n'.join(blocks)
-        return f"{pragma}\n\n{contract_def}\n{shuffled_body}\n}}"
 
     def insert_fake_code(self, code, num_fake_items=3):
         """
@@ -97,27 +68,39 @@ class LayoutObfuscator:
         :return: Code with added fake code
         """
         fake_items = []
-        for i in range(num_fake_items):
+        for _ in range(num_fake_items):
             template = random.choice(self.fake_code_templates)
-            if "{}" in template:
-                try:
-                    fake_items.append(template.format(random.randint(0, 100)))
-                except IndexError:
-                    continue  # Ignore if formatting fails
-        return code + '\n\n' + '\n'.join(fake_items)
+            fake_items.append(template.format(random.randint(0, 100)))
 
-    def is_reserved_word(self, word):
+        # Insert fake code at the end of the contract
+        return code.strip() + '\n\n' + '\n'.join(fake_items)
+
+    def shuffle_code_blocks(self, code):
         """
-        Check if a word is a reserved Solidity keyword
-        :param word: Input word
-        :return: Whether the word is reserved
+        Shuffle the order of functions and contract members
+        :param code: Input code
+        :return: Code with shuffled blocks
         """
-        reserved_words = {
-            "uint", "address", "string", "public", "private", "function", "mapping", "event", "modifier",
-            "constructor", "bool", "require", "emit", "revert", "return", "returns", "if", "else", "for", "while",
-            "pragma", "contract", "interface", "library", "assembly", "memory", "storage", "pure", "view", "external"
-        }
-        return word in reserved_words
+        pragma_match = re.search(r'pragma\s+solidity.*?;', code)
+        contract_match = re.search(r'contract\s+\w+\s*\{', code)
+
+        if not pragma_match or not contract_match:
+            raise ValueError("Invalid Solidity contract structure.")
+
+        pragma = pragma_match.group()
+        contract_def = contract_match.group()
+
+        # Extract the body of the contract
+        body_start = contract_match.end()
+        body_end = code.rfind("}")
+        body_content = code[body_start:body_end].strip()
+
+        # Split contract body into blocks and shuffle
+        blocks = re.findall(r'(function.*?}|mapping.*?;|uint.*?;|event.*?;|modifier.*?}|constructor.*?})', body_content, flags=re.DOTALL)
+        random.shuffle(blocks)
+
+        shuffled_body = '\n\n'.join(blocks)
+        return f"{pragma}\n\n{contract_def}\n{shuffled_body}\n}}"
 
     def obfuscate(self, code):
         """
