@@ -33,7 +33,7 @@ class SolidityParser:
             raise ValueError("No code loaded. Please call read_file() first.")
 
         # Regular expression to match single-line and multi-line comments
-        comment_pattern = r"(//.*?$|/\*.*?\*/)"
+        comment_pattern = r"((?!\/\/ SPDX-License-Identifier:.*?$)\/\/.*?$|\/\*.*?\*\/)"
         self.code = re.sub(comment_pattern, "", self.code, flags=re.DOTALL | re.MULTILINE)
 
     def parse(self):
