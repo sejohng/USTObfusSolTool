@@ -36,22 +36,6 @@ class DeadCodeObfuscator:
 
         return code
 
-    def add_dead_code_to_structs(self, code):
-        """
-        Insert dead variables inside struct definitions
-        :param code: Input code
-        :return: Code with dead code added to structs
-        """
-        pattern = r'(struct\s+\w+\s*\{)'
-        matches = re.findall(pattern, code)
-
-        for match in matches:
-            fake_var = "uint256 fakeField;"  # Example of fake struct field
-            replacement = f"{match}\n\t{fake_var}"
-            code = code.replace(match, replacement)
-
-        return code
-
     def obfuscate(self, code, density=0.3):
         """
         Apply dead code obfuscation
@@ -59,8 +43,6 @@ class DeadCodeObfuscator:
         :param density: Density of dead code within functions
         :return: Code with dead code obfuscation applied
         """
-        # Insert dead code into structs
-        code = self.add_dead_code_to_structs(code)
         # Insert dead code into functions
         code = self.insert_dead_code(code, density)
         return code

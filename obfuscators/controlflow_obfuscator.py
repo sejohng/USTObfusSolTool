@@ -60,7 +60,6 @@ class ControlflowObfuscator:
 
         # Split contract body into blocks and shuffle
         blocks = re.findall(r'(function[^{}]*{([^{}]*{[^{}]*})*[^{}]*}|mapping.*?;|event.*?;|modifier[^{}]*{([^{}]*{[^{}]*})*[^{}]*}|constructor[^{}]*{([^{}]*{[^{}]*})*[^{}]*}|struct[^{}]*{([^{}]*{[^{}]*})*[^{}]*}|((bool|u?int(8|16|32|64|128|256)?|u?fixed|address|string|byte(s[0-9]*)?|enum)\s+.*?;))', body_content, flags=re.DOTALL)
-        print(blocks)
         random.shuffle(blocks)
 
         shuffled_body = ''
