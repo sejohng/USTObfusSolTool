@@ -44,7 +44,7 @@ class ControlflowObfuscator:
         :param code: Input code
         :return: Code with shuffled blocks
         """
-        pragma_match = re.search(r'pragma\s+solidity.*?;', code)
+        pragma_match = re.search(r'\/\/ SPDX-License-Identifier:.*\n?pragma\s+solidity.*?;', code)
         contract_match = re.search(r'contract\s+\w+\s*\{', code)
 
         if not pragma_match or not contract_match:
@@ -75,7 +75,7 @@ class ControlflowObfuscator:
         :return: Minified code
         """
         # Remove all line breaks and multiple spaces
-        code = re.sub(r'\s+', ' ', code)
+        code = re.sub(r'(?<!\/\/ SPDX-License-Identifier: MIT)\s+', ' ', code)
         # Remove spaces around curly braces and semicolons
         code = re.sub(r'\s*{\s*', '{', code)
         code = re.sub(r'\s*}\s*', '}', code)
