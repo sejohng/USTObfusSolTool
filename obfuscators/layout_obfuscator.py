@@ -30,7 +30,7 @@ class LayoutObfuscator:
             var_name = match.group('var_name')
             if var_name not in self.variable_map:
                 self.variable_map[var_name] = generate_random_name()
-                code = re.sub(rf'(?P<stay>"[^"]*")|(?<!.)\bsender\b', lambda x: x.group('stay') if x.group('stay') else self.variable_map[var_name], code)
+                code = re.sub(rf'(?P<stay>"[^"]*")|(?<!\.)\b{var_name}\b', lambda x: x.group('stay') if x.group('stay') else self.variable_map[var_name], code)
 
         return code
 
