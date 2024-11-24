@@ -13,7 +13,6 @@ class DeadCodeObfuscator:
         self.fake_code_templates = [
             "uint256 uselessVar = 0;",  # Simple unused variable
             "if (1 == 0) { uint256 neverUsed = 42; }",  # Conditional that never executes
-            "uint256 anotherUselessVar = block.timestamp;",  # Unused variable based on timestamp
             "for (uint256 i = 0; i < 0; i++) { uint256 neverIterated = i; }",  # Unreachable loop
             "require(1 == 0, 'This will never happen');",  # Impossible requirement
             "bytes32 unusedHash = keccak256(abi.encodePacked('dead_code'));",  # Dead hash calculation

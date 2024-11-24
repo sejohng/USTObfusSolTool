@@ -46,7 +46,7 @@ class DataflowObfuscator:
         :param code: Input code
         :return: Code with temporary variables inserted
         """
-        pattern = r'\b(?P<prefix>(?P<var_type>bool|u?int(8|16|32|64|128|256)?|u?fixed|address|string|byte(s[0-9]*)?|enum)\s+(([a-zA-Z_][a-zA-Z0-9_]*)\s+)*)(?P<var_name>[a-zA-Z_][a-zA-Z0-9_]*)\b\s*=\s*(?P<var_val>.+?);'
+        pattern = r'\b(?!.*constant.*)(?P<prefix>(?P<var_type>bool|u?int(8|16|32|64|128|256)?|u?fixed|address|string|byte(s[0-9]*)?|enum)\s+(([a-zA-Z_][a-zA-Z0-9_]*)\s+)*)(?P<var_name>[a-zA-Z_][a-zA-Z0-9_]*)\b\s*=\s*(?P<var_val>.+?);'
         matches = re.finditer(pattern, code)
 
         def replace_assignment(match):
