@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 /**
  * Example Solidity contract for testing obfuscation.
- * Author: Shijun Jiang @HKUST
+ * Author: Group7 @HKUST
  */
 
 contract AdvancedExample {
